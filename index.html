@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#30363d">
+  <title>ESMIL EOL Vision BMPD Analysis</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Malgun Gothic", Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      padding: 20px 10px;
+      color: #1f2937;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 520px;
+      background: #ffffff;
+      border: 1px solid #dfe3e8;
+      border-radius: 10px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+    }
+
+    .header {
+      background: #30363d;
+      color: #ffffff;
+      text-align: center;
+      padding: 24px 16px;
+    }
+
+    .header h1 {
+      font-size: 21px;
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      font-size: 13px;
+      color: #d1d5db;
+    }
+
+    .section-title {
+      background: #20252b;
+      color: #ffffff;
+      text-align: center;
+      padding: 12px 10px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .form-body {
+      padding: 20px;
+    }
+
+    .fixed-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .fixed-card {
+      background: #f8fafc;
+      border: 1px solid #dfe3e8;
+      border-radius: 6px;
+      padding: 10px;
+    }
+
+    .fixed-card.wide {
+      grid-column: 1 / -1;
+    }
+
+    .fixed-card span {
+      display: block;
+      font-size: 11px;
+      color: #6b7280;
+      margin-bottom: 4px;
+    }
+
+    .fixed-card strong {
+      font-size: 15px;
+      word-break: break-word;
+    }
+
+    .form-group {
+      margin-bottom: 17px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #111827;
+    }
+
+    select,
+    input[type="text"],
+    input[type="datetime-local"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #cfd5dc;
+      border-radius: 5px;
+      background: #fafafa;
+      outline: none;
+      color: #1f2937;
+    }
+
+    select:focus,
+    input:focus,
+    textarea:focus {
+      background: #ffffff;
+      border-color: #6b7280;
+    }
+
+    textarea {
+      min-height: 86px;
+      resize: vertical;
+    }
+
+    .time-row {
+      display: flex;
+      gap: 6px;
+    }
+
+    .time-row input {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .btn-time {
+      border: 0;
+      border-radius: 5px;
+      background: #6b7280;
+      color: #ffffff;
+      padding: 0 12px;
+      cursor: pointer;
+      white-space: nowrap;
+      font-size: 12px;
+    }
+
+    .duration-box {
+      background: #eef6ff;
+      border: 1px solid #bfdcff;
+      border-radius: 5px;
+      padding: 10px;
+      font-size: 13px;
+      margin-top: -7px;
+      margin-bottom: 17px;
+    }
+
+    .btn-submit {
+      width: 100%;
+      border: 0;
+      border-radius: 6px;
+      background: #0969da;
+      color: #ffffff;
+      padding: 14px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-submit:disabled {
+      background: #9ca3af;
+      cursor: not-allowed;
+    }
+
+    .status {
+      min-height: 22px;
+      margin-top: 10px;
+      font-size: 12px;
+      line-height: 1.5;
+      text-align: center;
+      color: #4b5563;
+    }
+
+    .footer {
+      text-align: right;
+      color: #9ca3af;
+      font-size: 11px;
+      margin-top: 14px;
+    }
+
+    @media (max-width: 380px) {
+      .time-row {
+        flex-direction: column;
+      }
+
+      .btn-time {
+        min-height: 38px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header class="header">
+      <h1>ESMIL EOL Vision<br>BMPD 분석</h1>
+      <p>ESMIL EOL Vision Downtime Analysis</p>
+    </header>
+
+    <div class="section-title">부동 분석 리포트 생성</div>
+
+    <section class="form-body">
+      <div class="fixed-info">
+        <div class="fixed-card">
+          <span>Site</span>
+          <strong>ESMIL</strong>
+        </div>
+        <div class="fixed-card">
+          <span>Process</span>
+          <strong>EOL</strong>
+        </div>
+        <div class="fixed-card wide">
+          <span>Vision Type</span>
+          <strong>E_EOL cosmetic</strong>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="type">종류 (Type) *</label>
+        <select id="type">
+          <option value="-">선택</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="hogi">호기 (Unit No.) *</label>
+        <select id="hogi">
+          <option value="-">선택</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="source">원인처 (Source of Cause) *</label>
+        <select id="source">
+          <option value="-">선택</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="startTime">발생시간 (Occurrence Time) *</label>
+        <div class="time-row">
+          <input type="datetime-local" id="startTime">
+          <button type="button" class="btn-time" onclick="setNow('startTime')">현재시간</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="endTime">조치완료 (Action Completed Time) *</label>
+        <div class="time-row">
+          <input type="datetime-local" id="endTime">
+          <button type="button" class="btn-time" onclick="setNow('endTime')">현재시간</button>
+        </div>
+      </div>
+
+      <div class="duration-box">
+        계산 부동시간: <strong id="durationText">0분</strong>
+      </div>
+
+      <div class="form-group">
+        <label for="worker">작업자 (PIC) *</label>
+        <input type="text" id="worker" maxlength="100" placeholder="이름 입력">
+      </div>
+
+      <div class="form-group">
+        <label for="phenomenon">현상 (Phenomenon) *</label>
+        <textarea id="phenomenon" maxlength="3000" placeholder="발생한 현상을 입력하세요."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="cause">원인 (Cause) *</label>
+        <textarea id="cause" maxlength="3000" placeholder="확인된 원인을 입력하세요."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="action">조치 (Action) *</label>
+        <textarea id="action" maxlength="3000" placeholder="조치 내용을 입력하세요."></textarea>
+      </div>
+
+      <button type="button" class="btn-submit" id="submitBtn" onclick="saveAndCopy()">
+        저장 요청 및 리포트 복사
+      </button>
+      <div id="status" class="status" aria-live="polite"></div>
+      <div class="footer">ESMIL EOL Vision</div>
+    </section>
+  </main>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxfOJfdEtNJvIf1woa_eftxzo25yNBjl5vQmT9cwpOc724KadtJJqJM7gJGAw4sSA0/exec";
+
+    const CONFIG = Object.freeze({
+      site: "ESMIL",
+      process: "EOL",
+      visionType: "E_EOL cosmetic",
+      types: Object.freeze(["BM", "PD", "PM", "ETC"]),
+      hogi: Object.freeze([
+        "#1-1", "#1-2", "#2-1", "#2-2", "#3-1",
+        "#3-2", "#4-1", "#4-2", "#5-1", "#5-2"
+      ]),
+      sources: Object.freeze([
+        "APD",
+        "Deep Learning 적용",
+        "VP 다운",
+        "PC 재부팅",
+        "운영 다운",
+        "기타 Heavy Alarm"
+      ])
+    });
+
+    window.addEventListener("DOMContentLoaded", () => {
+      fillSelect("type", CONFIG.types);
+      fillSelect("hogi", CONFIG.hogi);
+      fillSelect("source", CONFIG.sources);
+      setNow("startTime");
+      setNow("endTime");
+      document.getElementById("startTime").addEventListener("change", updateDuration);
+      document.getElementById("endTime").addEventListener("change", updateDuration);
+      updateDuration();
+    });
+
+    function fillSelect(id, values) {
+      const select = document.getElementById(id);
+      values.forEach(value => {
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = value;
+        select.appendChild(option);
+      });
+    }
+
+    function toDatetimeLocalValue(date) {
+      const local = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+      return local.toISOString().slice(0, 16);
+    }
+
+    function setNow(fieldId) {
+      document.getElementById(fieldId).value = toDatetimeLocalValue(new Date());
+      updateDuration();
+    }
+
+    function formatDateTime(value) {
+      if (!value) return "";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return "";
+
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      const minutes = String(date.getMinutes()).padStart(2, "0");
+      const ampm = date.getHours() >= 12 ? "PM" : "AM";
+      const hour12 = date.getHours() % 12 || 12;
+      const hours = String(hour12).padStart(2, "0");
+
+      return `${year}.${month}.${day}. ${ampm} ${hours}:${minutes}`;
+    }
+
+    function getDowntimeMinutes() {
+      const startValue = document.getElementById("startTime").value;
+      const endValue = document.getElementById("endTime").value;
+      if (!startValue || !endValue) return null;
+
+      const start = new Date(startValue);
+      const end = new Date(endValue);
+      const minutes = Math.round((end.getTime() - start.getTime()) / 60000);
+      return Number.isFinite(minutes) ? minutes : null;
+    }
+
+    function updateDuration() {
+      const minutes = getDowntimeMinutes();
+      const element = document.getElementById("durationText");
+      if (minutes === null) {
+        element.textContent = "계산 불가";
+      } else if (minutes < 0) {
+        element.textContent = "시간 순서 확인 필요";
+      } else {
+        element.textContent = `${minutes}분`;
+      }
+    }
+
+    function requireSelect(id, label) {
+      const element = document.getElementById(id);
+      if (element.value === "-") {
+        alert(`${label} 항목을 선택해주세요.`);
+        element.focus();
+        return false;
+      }
+      return true;
+    }
+
+    function requireText(id, label) {
+      const element = document.getElementById(id);
+      if (!element.value.trim()) {
+        alert(`${label} 내용을 입력해주세요.`);
+        element.focus();
+        return false;
+      }
+      return true;
+    }
+
+    function makeSubmissionId() {
+      if (window.crypto && typeof window.crypto.randomUUID === "function") {
+        return window.crypto.randomUUID();
+      }
+      return `ESMIL-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    }
+
+    function buildData() {
+      const startTime = document.getElementById("startTime").value;
+      const endTime = document.getElementById("endTime").value;
+      const startDate = new Date(startTime);
+      const endDate = new Date(endTime);
+
+      return {
+        submissionId: makeSubmissionId(),
+        type: document.getElementById("type").value,
+        site: CONFIG.site,
+        process: CONFIG.process,
+        hogi: document.getElementById("hogi").value,
+        visionType: CONFIG.visionType,
+        source: document.getElementById("source").value,
+        startTimeLocal: startTime,
+        endTimeLocal: endTime,
+        startTimeIso: startDate.toISOString(),
+        endTimeIso: endDate.toISOString(),
+        startTimeDisplay: formatDateTime(startTime),
+        endTimeDisplay: formatDateTime(endTime),
+        downtimeMinutes: getDowntimeMinutes(),
+        worker: document.getElementById("worker").value.trim(),
+        phenomenon: document.getElementById("phenomenon").value.trim(),
+        cause: document.getElementById("cause").value.trim(),
+        action: document.getElementById("action").value.trim()
+      };
+    }
+
+    function buildReport(data) {
+      return `[ESMIL EOL Vision 부동 분석 공유]
+종류 (Type): ${data.type}
+Site: ${data.site}
+공정 (Process): ${data.process}
+호기 (Unit No.): ${data.hogi}
+Vision Type: ${data.visionType}
+원인처 (Source of Cause): ${data.source}
+발생시간 (Occurrence Time): ${data.startTimeDisplay}
+조치완료 (Action Completed): ${data.endTimeDisplay}
+부동시간 (Downtime): ${data.downtimeMinutes}분
+작업자 (PIC): ${data.worker}
+현상 (Phenomenon): ${data.phenomenon}
+원인 (Cause): ${data.cause}
+조치 (Action): ${data.action}
+제출 ID: ${data.submissionId}`;
+    }
+
+    async function copyText(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+        return true;
+      } catch (_) {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.select();
+        const copied = document.execCommand("copy");
+        textarea.remove();
+        return copied;
+      }
+    }
+
+    async function saveAndCopy() {
+      if (!requireSelect("type", "종류")) return;
+      if (!requireSelect("hogi", "호기")) return;
+      if (!requireSelect("source", "원인처")) return;
+      if (!requireText("worker", "작업자")) return;
+      if (!requireText("phenomenon", "현상")) return;
+      if (!requireText("cause", "원인")) return;
+      if (!requireText("action", "조치")) return;
+
+      const downtimeMinutes = getDowntimeMinutes();
+      if (downtimeMinutes === null) {
+        alert("발생시간과 조치완료 시간을 입력해주세요.");
+        return;
+      }
+      if (downtimeMinutes < 0) {
+        alert("조치완료 시간은 발생시간보다 빠를 수 없습니다.");
+        return;
+      }
+
+      if (!SCRIPT_URL.startsWith("https://script.google.com/macros/s/") || !SCRIPT_URL.endsWith("/exec")) {
+        alert("index.html의 SCRIPT_URL을 Apps Script 웹 앱 /exec URL로 교체해주세요.");
+        return;
+      }
+
+      const data = buildData();
+      const report = buildReport(data);
+      const button = document.getElementById("submitBtn");
+      const status = document.getElementById("status");
+
+      button.disabled = true;
+      button.textContent = "전송 중...";
+      status.textContent = "Google Sheet 전송 요청 중입니다.";
+
+      try {
+        await fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          cache: "no-store",
+          redirect: "follow",
+          headers: {
+            "Content-Type": "text/plain;charset=UTF-8"
+          },
+          body: JSON.stringify(data)
+        });
+
+        const copied = await copyText(report);
+        status.textContent = copied
+          ? "전송 요청 완료 / 리포트 복사 완료"
+          : "전송 요청 완료 / 클립보드 복사 실패";
+
+        alert(
+          copied
+            ? "전송 요청이 완료되었고 리포트가 복사되었습니다.\n최초 배포 후에는 Google Sheet에 실제 행이 생성되었는지 확인하세요."
+            : "전송 요청은 완료되었으나 리포트 복사에 실패했습니다."
+        );
+      } catch (error) {
+        console.error(error);
+        const copied = await copyText(report);
+        status.textContent = "전송 실패 - 네트워크와 배포 URL을 확인하세요.";
+        alert(
+          `전송에 실패했습니다.\n리포트 ${copied ? "복사 완료" : "복사 실패"}\n\n${error.message || error}`
+        );
+      } finally {
+        button.disabled = false;
+        button.textContent = "저장 요청 및 리포트 복사";
+      }
+    }
+  </script>
+</body>
+</html>
