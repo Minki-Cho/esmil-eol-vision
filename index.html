@@ -309,8 +309,11 @@
       visionType: "E_EOL cosmetic",
       types: Object.freeze(["BM", "PD", "PM", "ETC"]),
       hogi: Object.freeze([
-        "#1-1", "#1-2", "#2-1", "#2-2", "#3-1",
-        "#3-2", "#4-1", "#4-2", "#5-1", "#5-2"
+        "#1-1", "#1-2", "#1호기 공통",
+        "#2-1", "#2-2", "#2호기 공통",
+        "#3-1", "#3-2", "#3호기 공통",
+        "#4-1", "#4-2", "#4호기 공통",
+        "#5-1", "#5-2"
       ]),
       sources: Object.freeze([
         "APD",
@@ -318,7 +321,24 @@
         "VP 다운",
         "PC 재부팅",
         "운영 다운",
-        "기타 Heavy Alarm"
+        "기타 Heavy Alarm",
+        "기타",
+        "instage panel data alarm",
+        "EMO",
+        "임의 정지",
+        "업데이트",
+        "리워크 대응",
+        "P&P 커플링 이슈",
+        "Vacuum Alarm",
+        "#2-2 커플링 점검",
+        "레시피 적용",
+        "#2-1 컨베이어 PD",
+        "레시피 수정",
+        "오프셋 변경",
+        "Classifier 수정",
+        "Qualifier 수정",
+        "Alignment 이슈",
+        "ETC"
       ])
     });
 
@@ -461,8 +481,7 @@ Vision Type: ${data.visionType}
 작업자 (PIC): ${data.worker}
 현상 (Phenomenon): ${data.phenomenon}
 원인 (Cause): ${data.cause}
-조치 (Action): ${data.action}
-제출 ID: ${data.submissionId}`;
+조치 (Action): ${data.action}`;
     }
 
     async function copyText(text) {
